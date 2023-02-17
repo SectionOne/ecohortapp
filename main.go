@@ -30,6 +30,8 @@ type Config struct {
 	AfegirRegistresTempMaximaEntrada *widget.Entry //Afegim la referencia a la entrada del valor tempMaxima per a nous registres que guardem en la bd
 	AfegirRegistresTempMinimaEntrada *widget.Entry //Afegim la referencia a la entrada del valor tempMinima per a nous registres que guardem en la bd
 	AfegirRegistresHumitatEntrada *widget.Entry //Afegim la referencia a la entrada del valor humitat per a nous registres que guardem en la bd
+	municipi string //Afegim la referencia a aquest valor de configuració
+	apiKey string //Afegim la referencia a aquest valor de configuració
 }
 
 func main() {
@@ -55,7 +57,7 @@ func main() {
 
 	//Definim la capacitat de que l'usuari modifiqui el municipi i la apiKey
 	municipi = fyneApp.Preferences().StringWithFallback("municipi","08001")
-	municipi = fyneApp.Preferences().StringWithFallback("apiKey","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvZGlnaW9jaW9AZ21haWwuY29tIiwianRpIjoiYjRlZTViMjctZDhhMS00YmIxLWFiZjgtYmFjYTViOTc5ZDhjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2NzU2MTY3OTIsInVzZXJJZCI6ImI0ZWU1YjI3LWQ4YTEtNGJiMS1hYmY4LWJhY2E1Yjk3OWQ4YyIsInJvbGUiOiIifQ.y-WKC8DkAJ4O__aNkvWS60AwmYl6dVHcBZKcowfmNKs")
+	apiKey = fyneApp.Preferences().StringWithFallback("apiKey","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvZGlnaW9jaW9AZ21haWwuY29tIiwianRpIjoiYjRlZTViMjctZDhhMS00YmIxLWFiZjgtYmFjYTViOTc5ZDhjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2NzU2MTY3OTIsInVzZXJJZCI6ImI0ZWU1YjI3LWQ4YTEtNGJiMS1hYmY4LWJhY2E1Yjk3OWQ4YyIsInJvbGUiOiIifQ.y-WKC8DkAJ4O__aNkvWS60AwmYl6dVHcBZKcowfmNKs")
 
 	//crearem i definim el tamany de una pantalla de fyne
 	myApp.MainWindow = fyneApp.NewWindow("Eco Hort App")

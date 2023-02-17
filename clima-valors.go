@@ -91,11 +91,11 @@ type Prediccion struct {
 	Dia []Dia `json:"dia"`
 }
 type Diaria struct { //Obtenim les diferents dades corresponents a la resposta Json i les asignem a cada un dels camps
-	ProbPrecipitacio      int    `json:"probPrecipitacion"`
-	TemperaturaMax         int   `json:"maxima"`
-	TemperaturaMin         int   `json:"minima"`
-	HumitatRelativa int   `json:"humedadRelativa"`
-	Time          time.Time `json:"-"` //En aquest cas afegirem el simbol- per ignorar que no rebem aquesta dada
+	ProbPrecipitacio int       `json:"probPrecipitacion"`
+	TemperaturaMax   int       `json:"maxima"`
+	TemperaturaMin   int       `json:"minima"`
+	HumitatRelativa  int       `json:"humedadRelativa"`
+	Time             time.Time `json:"-"` //En aquest cas afegirem el simbol- per ignorar que no rebem aquesta dada
 }
 
 // Realitzem una funció per gestionar l'obtenció de les dades climatologiques i el primer que tenim que fer és fer referencia a el package natiu http a través del struct Prediccio
@@ -103,13 +103,13 @@ func (g *Diaria) GetPrediccions() (*Diaria, error) {
 	result, _ := GetPreUrl() //Definim una funció per obtenir la Url per la petició de dades climatologiques
 	valors, err := GetPrediccio(result)
 	return valors, err
-	
+
 }
 
 func GetPreUrl() (string, error) {
 	//Definim la variable url amb el endpoint corresponent a la Predicció Especifica d'un Municipi. En aquest cas Abrera codi 08001
 	url := fmt.Sprintf("https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/%s/?api_key=%s", municipi, apiKey) //Definim una variable per contenir la url a la que realitzarem la crida
-	
+
 	//Preparem la petició emprant el package http
 	req, _ := http.NewRequest("GET", url, nil) //A on li indiquem el metode get, la url de la petició i el tercer parametyre com a nil
 
@@ -174,11 +174,11 @@ func GetPrediccio(url string) (*Diaria, error) {
 	precipitacio, tempMax, tempMin, humitat = prediccio[0].Prediccion.Dia[0].ProbPrecipitacion[0].Value, prediccio[0].Prediccion.Dia[0].Temperatura.Maxima, prediccio[0].Prediccion.Dia[0].Temperatura.Minima, prediccio[0].Prediccion.Dia[0].HumedadRelativa.Maxima
 
 	var currentInfo = Diaria{
-		ProbPrecipitacio:      precipitacio,
-		TemperaturaMax:         tempMax,
-		TemperaturaMin:        tempMin,
-		HumitatRelativa: humitat,
-		Time:          time.Now(),
+		ProbPrecipitacio: precipitacio,
+		TemperaturaMax:   tempMax,
+		TemperaturaMin:   tempMin,
+		HumitatRelativa:  humitat,
+		Time:             time.Now(),
 	}
 
 	return &currentInfo, nil //Retornem un objecte nou poblat amb tota la informació estructurada

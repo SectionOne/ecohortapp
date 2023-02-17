@@ -2,10 +2,13 @@ package main
 
 import (
 	"ecohortapp/repository"
+	"fmt"
+	"reflect"
 	"strconv"
 	"time"
 
 	"fyne.io/fyne/v2"
+	_ "fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
@@ -20,10 +23,66 @@ func (app *Config) getToolBar(win fyne.Window) *widget.Toolbar {
 		widget.NewToolbarAction(theme.ViewRefreshIcon(), func() {
 			app.actualitzarClimaDadesContent()
 		}),
-		widget.NewToolbarAction(theme.SettingsIcon(), func() {}),
+		widget.NewToolbarAction(theme.SettingsIcon(), func() {
+			//Realitzem una crida a la funció que conté el dialeg per modificar les preferencies de l'app
+			w := app.mostrarPreferencies()
+			//Definim el tamany per aquesta nova finestra
+			w.Resize(fyne.NewSize(300, 200))
+			//Mostrem la finestra
+			w.Show()
+
+		}),
 	)
 
 	return toolBar
+}
+
+func (app *Config) mostrarPreferencies() dialog.Dialog {
+	//win := app.App.NewWindow("Ajustos")
+
+	//Definim les variables a on guardarem el resultat del mètode d'entrada
+	dadaMunicipi := widget.NewEntry()
+	dadaApiKey := widget.NewEntry()
+	dadaMunicipi.Text = municipi
+	dadaApiKey.Text = apiKey
+	esStringValidador := func(s string) error {
+		_, err := fmt.Print(reflect.TypeOf(s))
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	dadaMunicipi.Validator = esStringValidador
+	dadaApiKey.Validator = esStringValidador
+
+	fmt.Println(dadaMunicipi.Text)
+	//Crearem el dialeg creant un formulari
+	addForm := dialog.NewForm(
+		"Configurar ajustaments",
+		"Guardar",
+		"Cancelar",
+		//Afegirem les etiquetes en forma de item per el formulari
+		[]*widget.FormItem{
+			{Text: "Codi Municipi", Widget: dadaMunicipi},
+			{Text: "Api Key", Widget: dadaApiKey},
+		},
+		//A continuació realitzem la validació de les dades
+		func(valid bool) {
+			if valid {
+				municipi = dadaMunicipi.Text
+				apiKey = dadaApiKey.Text
+				fmt.Println(dadaMunicipi.SelectedText())
+				//Desenvolupar un filtratge, convertint les dades a els formats de la bd
+				app.App.Preferences().SetString("municipi", dadaMunicipi.Text)
+				app.App.Preferences().SetString("apiKey", dadaApiKey.Text)
+
+				//Invoquem el paremetre del struct Config per permetre que refresqui el widget de la taula amb el nou registre
+				app.actualitzarClimaDadesContent()
+			}
+		},
+		app.MainWindow)
+
+	return addForm
 }
 
 // Funció per afegir Registres a on referenciem el struct Config
@@ -90,14 +149,14 @@ func (app *Config) addRegistresDialog() dialog.Dialog {
 				tempMaxima, _ := strconv.Atoi(tempMaximaEntrada.Text)
 				tempMinima, _ := strconv.Atoi(tempMinimaEntrada.Text)
 				humitat, _ := strconv.Atoi(humitatEntrada.Text)
-				
+
 				//Invoquem el mètode de la base de dades per insertar registres i que poblarem amb les dades formatejades
 				_, err := app.DB.InsertRegistre(repository.Registres{
-					Data:        dataRegistre,
-					Precipitacio:  precipitacio,
-					TempMaxima: tempMaxima,
-					TempMinima: tempMinima,
-					Humitat: humitat,
+					Data:         dataRegistre,
+					Precipitacio: precipitacio,
+					TempMaxima:   tempMaxima,
+					TempMinima:   tempMinima,
+					Humitat:      humitat,
 				})
 				//Controlem si és produeix algun error
 				if err != nil {
