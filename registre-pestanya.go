@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -16,7 +19,56 @@ func (app *Config) registresTab() *fyne.Container {
 
 // Realitzem una funcio adicional que ens retornara el punter a la widget en forma de taula i a on situarem les dades
 func (app *Config) getRegistresTable() *widget.Table {
-	return nil
+	//Invoquem la funcio anterior per carregar l'estructura de dedes amb la interficie de slice de slices
+	data := app.getRegistresSlice()
+
+	//Definim l'estructura del widget per crear una nova taula amb fyne
+	t := widget.NewTable(
+		func() (int, int) {
+			return len(data), len(data[0])
+		},
+		func() fyne.CanvasObject {
+			ctr := container.NewVBox(widget.NewLabel(""))
+			return ctr
+		},
+		func(i widget.TableCellID, o fyne.CanvasObject) {
+			if i.Col == (len(data[0])-1) && i.Row != 0 {
+				//Ultima cel.la - situa un botò
+				w := widget.NewButtonWithIcon("Borrar", theme.DeleteIcon(), func() {
+					//Presentem un dialeg de confirmació
+					dialog.ShowConfirm("Borrar?", "", func(deleted bool) {
+						id, _ := strconv.Atoi(data[i.Row][0].(string)) //Transformem el identificador a decimal sencer
+						err := app.DB.BorrarRegistre(int64(id))        //Invoquem el metode per borrar a partir d'un id
+						//Capturem possibles errors
+						if err != nil {
+							app.ErrorLog.Println(err)
+						}
+						//TODO: Forcem el refresc de la taula
+					}, app.MainWindow)
+				})
+				//Creem un widget d'alta importancia per mostrar un missatge destacat
+				w.Importance = widget.HighImportance
+
+				//Definim el contenidor a on situarem el objecte corresponent a el boto.
+				o.(*fyne.Container).Objects = []fyne.CanvasObject{
+					w,
+				}
+			} else {
+				//situarem la informació rebuda en el slice, recordem que primer gestiona la fila i després la columna
+				o.(*fyne.Container).Objects = []fyne.CanvasObject{
+					widget.NewLabel(data[i.Row][i.Col].(string)),
+				}
+			}
+		})
+
+	//Establim el ample de les diferents celdes
+	colWidths := []float32{50, 200, 200, 200, 200, 200, 110}
+	//Executem una estructura for per aplicar cada un de els amples amb el metode SetColumnWidth
+	for i := 0; i < len(colWidths); i++ {
+		t.SetColumnWidth(i, colWidths[i])
+	}
+
+	return t
 }
 
 // Realitzem una funció per obtenir tots els Registres en un Slice de Slices através d'una interficie que ens sera retornada
