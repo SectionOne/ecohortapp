@@ -52,3 +52,38 @@ func (repo *SQLiteRepository) InsertRegistre(registres Registres) (*Registres, e
 	registres.ID = id
 	return &registres, nil //Preparem els retorn amb un objecte o nil en cas d'error
 }
+
+func (repo *SQLiteRepository) ObtenirTotsRegistres() ([]Registres, error) {
+	//Formulem la consulta per obtenir totes les columnes de tots els registres ordenats per el camp purchase_date
+	query := "select id, data_registre, precipitacio, temp_maxima, temp_minima, humitat from registres order by data_registre"
+	//Executem la consulta
+	rows, err := repo.Conn.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close() //Tanquem la conexió a la bd i optimitzar
+
+	//Creem una variable anomenada tots de tipus slice Registres
+	var tots []Registres
+	//Executem una estructura for per consultar un dels resultats i inclourels en el slice
+	for rows.Next() {
+		var h Registres
+		var unixTime int64
+		err := rows.Scan(
+			&h.ID,
+			&unixTime,
+			&h.Precipitacio,
+			&h.TempMaxima,
+			&h.TempMinima,
+			&h.Humitat,
+		)
+		//Si es produeix algun error el gestionem
+		if err != nil {
+			return nil, err
+		}
+		h.Data = time.Unix(unixTime, 0)
+		tots = append(tots, h) //Apliquem la inclusió de l'objecte dins del slice
+	}
+
+	return tots, nil //Retornem el slice o nil segons si es genera algun error
+}
