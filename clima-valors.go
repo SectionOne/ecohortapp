@@ -6,8 +6,11 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	_ "time"
+	"time"
 )
+
+var municipi = "08001" //Definim el municipi per la consulta dels valors climatologics
+var apiKey = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvZGlnaW9jaW9AZ21haWwuY29tIiwianRpIjoiYjRlZTViMjctZDhhMS00YmIxLWFiZjgtYmFjYTViOTc5ZDhjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2NzU2MTY3OTIsInVzZXJJZCI6ImI0ZWU1YjI3LWQ4YTEtNGJiMS1hYmY4LWJhY2E1Yjk3OWQ4YyIsInJvbGUiOiIifQ.y-WKC8DkAJ4O__aNkvWS60AwmYl6dVHcBZKcowfmNKs"
 
 type PreUrl struct {
 	Url    string       `json:"datos"` //Definim que el camp Url sera de tipus igual que el item "datos" del Json obtingut
@@ -87,21 +90,26 @@ type Dia struct {
 type Prediccion struct {
 	Dia []Dia `json:"dia"`
 }
+type Diaria struct { //Obtenim les diferents dades corresponents a la resposta Json i les asignem a cada un dels camps
+	ProbPrecipitacio      int    `json:"probPrecipitacion"`
+	TemperaturaMax         int   `json:"maxima"`
+	TemperaturaMin         int   `json:"minima"`
+	HumitatRelativa int   `json:"humedadRelativa"`
+	Time          time.Time `json:"-"` //En aquest cas afegirem el simbol- per ignorar que no rebem aquesta dada
+}
 
-// Desenvolupem un main temporal per provar la correcta recepció de les dades
-func main() {
+// Realitzem una funció per gestionar l'obtenció de les dades climatologiques i el primer que tenim que fer és fer referencia a el package natiu http a través del struct Prediccio
+func GetPrediccions() (*Diaria, error) {
 	result, _ := GetPreUrl() //Definim una funció per obtenir la Url per la petició de dades climatologiques
-	fmt.Println(result)      //Imprimim el resultat Ex. https://opendata.aemet.es/opendata/sh/4aa1d5d1
-	valors, _ := GetPrediccio()
-	for valor := range valors {
-		fmt.Println("Parametre: ", valors[valor])
-	}
+	valors, err := GetPrediccio(result)
+	return valors, err
+	
 }
 
 func GetPreUrl() (string, error) {
 	//Definim la variable url amb el endpoint corresponent a la Predicció Especifica d'un Municipi. En aquest cas Abrera codi 08001
-	url := "https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/08001/?api_key=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvZGlnaW9jaW9AZ21haWwuY29tIiwianRpIjoiYjRlZTViMjctZDhhMS00YmIxLWFiZjgtYmFjYTViOTc5ZDhjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2NzU2MTY3OTIsInVzZXJJZCI6ImI0ZWU1YjI3LWQ4YTEtNGJiMS1hYmY4LWJhY2E1Yjk3OWQ4YyIsInJvbGUiOiIifQ.y-WKC8DkAJ4O__aNkvWS60AwmYl6dVHcBZKcowfmNKs"
-
+	url := fmt.Sprintf("https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/%s/?api_key=%s", municipi, apiKey) //Definim una variable per contenir la url a la que realitzarem la crida
+	
 	//Preparem la petició emprant el package http
 	req, _ := http.NewRequest("GET", url, nil) //A on li indiquem el metode get, la url de la petició i el tercer parametyre com a nil
 
@@ -132,9 +140,8 @@ func GetPreUrl() (string, error) {
 	return preUrl.Url, err //Retornem els valors
 }
 
-func GetPrediccio() ([]int, error) {
-	//Definim la variable url amb el endpoint corresponent a la Predicció Especifica d'un Municipi. En aquest cas Abrera codi 08001
-	url := "https://opendata.aemet.es/opendata/sh/4aa1d5d1"
+func GetPrediccio(url string) (*Diaria, error) {
+	//Rebem la variable url amb el endpoint autoritzat corresponent a la Predicció Especifica d'un Municipi. En aquest cas Abrera codi 08001
 	//Preparem la petició emprant el package http
 	req, _ := http.NewRequest("GET", url, nil) //A on li indiquem el metode get, la url de la petició i el tercer parametyre com a nil
 
@@ -166,6 +173,13 @@ func GetPrediccio() ([]int, error) {
 	//Desestructurem del objecte prediccio i asignem els valors a les quatre variables claus sobre el clima: precipitacio, tempMax, tempMin, humitat
 	precipitacio, tempMax, tempMin, humitat = prediccio[0].Prediccion.Dia[0].ProbPrecipitacion[0].Value, prediccio[0].Prediccion.Dia[0].Temperatura.Maxima, prediccio[0].Prediccion.Dia[0].Temperatura.Minima, prediccio[0].Prediccion.Dia[0].HumedadRelativa.Maxima
 
-	valors := []int{precipitacio, tempMax, tempMin, humitat}
-	return valors, err //Retornem els valors
+	var currentInfo = Diaria{
+		ProbPrecipitacio:      precipitacio,
+		TemperaturaMax:         tempMax,
+		TemperaturaMin:        tempMin,
+		HumitatRelativa: humitat,
+		Time:          time.Now(),
+	}
+
+	return &currentInfo, nil //Retornem un objecte nou poblat amb tota la informació estructurada
 }
