@@ -14,9 +14,12 @@ func (app *Config) makeUI() {
 	) //Definim un contenidor amb una graella amb quatre columnes
 
 	app.ClimaDadesContainer = climaDadesContent
+	
+	//obtenim la barra d'eines o toolbar
+	toolBar := app.getToolBar(app.MainWindow)
 
 	//afegir el contenidor a la finestra
-	finalContent := container.NewVBox(climaDadesContent) //Definim un nou contenidor i que afegirem al canvas general.
+	finalContent := container.NewVBox(climaDadesContent, toolBar) //Definim un nou contenidor i que afegirem al canvas general.
 	
 	//Invoquem la pàgina principal i fem servir el mètode SetContent per afegir el contenidor
 	app.MainWindow.SetContent(finalContent)

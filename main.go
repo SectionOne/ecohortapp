@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"fyne.io/fyne/v2"
@@ -11,11 +12,12 @@ import (
 
 // Crearem un struct amb totes les configuracions que necessiti la nostre App
 type Config struct {
-	App      fyne.App    //Definim que emprara Fyne per construir la GUI de l'App
-	InfoLog  *log.Logger //Definim un Log d'accions
-	ErrorLog *log.Logger //Definim un Log d'errors
-	MainWindow fyne.Window //Aqui enmagatzemem la referencia a certes arees de la ui per controlar les actualitzacions de les mateixes.
+	App                 fyne.App        //Definim que emprara Fyne per construir la GUI de l'App
+	InfoLog             *log.Logger     //Definim un Log d'accions
+	ErrorLog            *log.Logger     //Definim un Log d'errors
+	MainWindow          fyne.Window     //Aqui enmagatzemem la referencia a certes arees de la ui per controlar les actualitzacions de les mateixes.
 	ClimaDadesContainer *fyne.Container //Guardem el contenidor de les dades del clima, referenciant el punter de memòria del contenidor de fyne.
+	HTTPClient          http.Client    //Afegim la referència al client http sence necessitat de invocar la llibreria
 }
 
 var myApp Config //Creem una variable que sigui de tipus Config i aixi enmagatzemar la configuració de l'App
@@ -40,7 +42,7 @@ func main() {
 	myApp.MainWindow.SetMaster()                    //Indiquem que es la pantalla principal. Si tanquem aquesta pantalla la aplicacio finalitza
 
 	myApp.makeUI() //Crearem una invocació a una funció externa que creara la interficié grafica a partir del contingut.
-	
+
 	//mostrar i executar l'aplicació
 	myApp.MainWindow.ShowAndRun()
 }
