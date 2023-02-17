@@ -28,6 +28,9 @@ func (app *Config) makeUI() {
 		container.NewTabItemWithIcon("Diari Meteorològic", theme.InfoIcon(), canvas.NewText("El contingut dels valors enregistrats els situarem aqui", nil)),
 	)
 
+	//Afegim aquesta instrucció per determinar la posició de les pestanyes
+	tabs.SetTabLocation(container.TabLocationTop)
+
 	//afegir el contenidor a la finestra
 	finalContent := container.NewVBox(climaDadesContent, toolBar, tabs) //Definim un nou contenidor i que afegirem al canvas general.
 
