@@ -60,3 +60,9 @@ func (app *Config) actualitzarClimaDadesContent() {
 	app.PronosticGraficContainer.Objects = []fyne.CanvasObject{grafic}
 	app.PronosticGraficContainer.Refresh()
 }
+
+func (app *Config) actualitzarRegistresTable() {
+	//Invoquem el mètode contenidor dels slices i l'asignem a l'atribut Registres del struct Config
+	app.Registres = app.getRegistresSlice()
+	app.RegistresTable.Refresh()
+}

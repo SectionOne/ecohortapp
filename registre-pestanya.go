@@ -46,7 +46,8 @@ func (app *Config) getRegistresTable() *widget.Table {
 						if err != nil {
 							app.ErrorLog.Println(err)
 						}
-						//TODO: Forcem el refresc de la taula
+						//Forcem el refresc de la taula
+						app.actualitzarRegistresTable()
 					}, app.MainWindow)
 				})
 				//Creem un widget d'alta importancia per mostrar un missatge destacat
