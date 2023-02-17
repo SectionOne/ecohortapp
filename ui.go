@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
 )
@@ -26,11 +25,13 @@ func (app *Config) makeUI() {
 	toolBar := app.getToolBar(app.MainWindow)
 
 	pronosticTabContent := app.pronosticTab()
+	//Crearem una variable que contindrà el contenidor amb la taula de Registres
+	registresTabContent := app.registresTab()
 
 	//obtenim les pestanyes de l'aplicació
 	tabs := container.NewAppTabs( //Definim un contenidor per les pestanyes i dins afegim cada una de les pestanyes amb icones
 		container.NewTabItemWithIcon("Pronòstic", theme.HomeIcon(), pronosticTabContent),
-		container.NewTabItemWithIcon("Diari Meteorològic", theme.InfoIcon(), canvas.NewText("El contingut dels valors enregistrats els situarem aqui", nil)),
+		container.NewTabItemWithIcon("Diari Meteorològic", theme.InfoIcon(), registresTabContent),
 	)
 
 	//Afegim aquesta instrucció per determinar la posició de les pestanyes

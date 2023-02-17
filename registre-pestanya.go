@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -16,7 +16,9 @@ import (
 func (app *Config) registresTab() *fyne.Container {
 	//També invoquem el mètode getRegistresTable() i l'asignem al item RegistresTable del struct
 	app.RegistresTable = app.getRegistresTable()
-	return nil
+	//Creem un contenidor amb una capça vertical i a on situem el widget que em general de la taula Registres
+	registresContainer := container.NewVBox(app.RegistresTable)
+	return registresContainer
 }
 
 // Realitzem una funcio adicional que ens retornara el punter a la widget en forma de taula i a on situarem les dades
