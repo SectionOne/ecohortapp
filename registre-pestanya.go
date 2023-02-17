@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"strconv"
 
-	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -17,7 +17,15 @@ func (app *Config) registresTab() *fyne.Container {
 	//També invoquem el mètode getRegistresTable() i l'asignem al item RegistresTable del struct
 	app.RegistresTable = app.getRegistresTable()
 	//Creem un contenidor amb una capça vertical i a on situem el widget que em general de la taula Registres
-	registresContainer := container.NewVBox(app.RegistresTable)
+	registresContainer := container.NewBorder(
+		nil,
+		nil,
+		nil,
+		nil,
+		//definirem un contenidor que ens permetra realizar graelles adaptatives i que indicarem amb dos parametres: el nombre de files/columnas i l’objecte que situarem.
+		container.NewAdaptiveGrid(1, app.RegistresTable),
+	)
+
 	return registresContainer
 }
 
@@ -68,7 +76,7 @@ func (app *Config) getRegistresTable() *widget.Table {
 		})
 
 	//Establim el ample de les diferents celdes
-	colWidths := []float32{50, 200, 200, 200, 200, 200, 110}
+	colWidths := []float32{50, 100, 100, 100, 100, 100, 110}
 	//Executem una estructura for per aplicar cada un de els amples amb el metode SetColumnWidth
 	for i := 0; i < len(colWidths); i++ {
 		t.SetColumnWidth(i, colWidths[i])

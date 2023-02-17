@@ -22,8 +22,8 @@ type Config struct {
 	MainWindow               fyne.Window           //Aqui enmagatzemem la referencia a certes arees de la ui per controlar les actualitzacions de les mateixes.
 	ClimaDadesContainer      *fyne.Container       //Guardem el contenidor de les dades del clima, referenciant el punter de memòria del contenidor de fyne.
 	PronosticGraficContainer *fyne.Container       //Definim un camp a on enmagatzem el contenidor del gràfic de clima, que ara sera de tipus contenidor fyne
-	Registres            [][]interface{}       //Per emmagatzemar el slice de slices en forma de interfície a on esta contingut les dades obtingudes de la bd
-	RegistresTable       *widget.Table         //Per emmagatzemar la referencia al punter que correspon el widget de la Taula.
+	Registres                [][]interface{}       //Per emmagatzemar el slice de slices en forma de interfície a on esta contingut les dades obtingudes de la bd
+	RegistresTable           *widget.Table         //Per emmagatzemar la referencia al punter que correspon el widget de la Taula.
 	HTTPClient               http.Client           //Afegim la referència al client http sence necessitat de invocar la llibreria
 }
 
@@ -50,9 +50,9 @@ func main() {
 
 	//crearem i definim el tamany de una pantalla de fyne
 	myApp.MainWindow = fyneApp.NewWindow("Eco Hort App")
-	myApp.MainWindow.Resize(fyne.NewSize(800, 700)) //Definim el tamany de la finestra
-	myApp.MainWindow.SetFixedSize(true)             //Definim que tindra un tamany fixe
-	myApp.MainWindow.SetMaster()                    //Indiquem que es la pantalla principal. Si tanquem aquesta pantalla la aplicacio finalitza
+	myApp.MainWindow.Resize(fyne.NewSize(900, 700)) //Definim el tamany de la finestra
+	myApp.MainWindow.SetFixedSize(true)              //Definim que tindra un tamany fixe
+	myApp.MainWindow.SetMaster()                     //Indiquem que es la pantalla principal. Si tanquem aquesta pantalla la aplicacio finalitza
 
 	myApp.makeUI() //Crearem una invocació a una funció externa que creara la interficié grafica a partir del contingut.
 
