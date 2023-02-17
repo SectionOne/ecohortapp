@@ -14,6 +14,7 @@ type Config struct {
 	App      fyne.App    //Definim que emprara Fyne per construir la GUI de l'App
 	InfoLog  *log.Logger //Definim un Log d'accions
 	ErrorLog *log.Logger //Definim un Log d'errors
+	MainWindow fyne.Window //Aqui enmagatzemem la referencia a certes arees de la ui per controlar les actualitzacions de les mateixes.
 }
 
 var myApp Config //Creem una variable que sigui de tipus Config i aixi enmagatzemar la configuració de l'App
@@ -32,8 +33,11 @@ func main() {
 	//crearem un repositori de base de dades
 
 	//crearem i definim el tamany de una pantalla de fyne
-	win := fyneApp.NewWindow("Eco Hort App")
+	myApp.MainWindow = fyneApp.NewWindow("Eco Hort App")
+	myApp.MainWindow.Resize(fyne.NewSize(800, 500)) //Definim el tamany de la finestra
+	myApp.MainWindow.SetFixedSize(true)             //Definim que tindra un tamany fixe
+	myApp.MainWindow.SetMaster()                    //Indiquem que es la pantalla principal. Si tanquem aquesta pantalla la aplicacio finalitza
 
 	//mostrar i executar l'aplicació
-	win.ShowAndRun()
+	myApp.MainWindow.ShowAndRun()
 }
