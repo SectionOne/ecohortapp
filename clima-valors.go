@@ -99,7 +99,7 @@ type Diaria struct { //Obtenim les diferents dades corresponents a la resposta J
 }
 
 // Realitzem una funció per gestionar l'obtenció de les dades climatologiques i el primer que tenim que fer és fer referencia a el package natiu http a través del struct Prediccio
-func GetPrediccions() (*Diaria, error) {
+func (g *Diaria) GetPrediccions() (*Diaria, error) {
 	result, _ := GetPreUrl() //Definim una funció per obtenir la Url per la petició de dades climatologiques
 	valors, err := GetPrediccio(result)
 	return valors, err
