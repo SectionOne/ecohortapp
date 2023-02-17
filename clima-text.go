@@ -25,21 +25,21 @@ func (app *Config) getClimaText() (*canvas.Text, *canvas.Text, *canvas.Text, *ca
 		displayColor := color.NRGBA{R: 0, G: 180, B: 0, A: 255} //Definim un color per defecte
 
 		//Si la precipitacio és menor a 50% mostrarem un color vermell
-		if prediccio.ProbPrecipitacio < 50{
-			displayColor = color.NRGBA{R: 180, G: 0, B: 0, A: 255} //Color per quan el valor és inferior a el tancament anterior
+		if prediccio.ProbPrecipitacio < 50 {
+			displayColor = color.NRGBA{R: 180, G: 0, B: 0, A: 255} //Color per quan el valor és inferior al 50%
 		}
 
 		//Preparem els strings de cada tipus de dada cimatologica amb el texte corresponent, emprant el Springf per encapsular tot en una variable de tipus string
-		precipitacioTxt := fmt.Sprintf("Precipitació: %d%", prediccio.ProbPrecipitacio)
+		precipitacioTxt := fmt.Sprintf("Precipitació: %d%%", prediccio.ProbPrecipitacio)
 		tempMaxTxt := fmt.Sprintf("Temp. Max: %d", prediccio.TemperaturaMax)
 		tempMinTxt := fmt.Sprintf("Temp. Min: %d", prediccio.TemperaturaMin)
-		humitatTxt := fmt.Sprintf("Humitat: %d%", prediccio.HumitatRelativa)
+		humitatTxt := fmt.Sprintf("Humitat: %d%%", prediccio.HumitatRelativa)
 
 		//Ja ara creem els nous elements de texte, indicant com a parametres els textes i els colors corresponents.
 		precipitacio = canvas.NewText(precipitacioTxt, displayColor)
 		tempMax = canvas.NewText(tempMaxTxt, nil)
 		tempMin = canvas.NewText(tempMinTxt, nil)
-		humitat = canvas.NewText(humitatTxt, displayColor)
+		humitat = canvas.NewText(humitatTxt, nil)
 
 	}
 

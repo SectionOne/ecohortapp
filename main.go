@@ -15,6 +15,7 @@ type Config struct {
 	InfoLog  *log.Logger //Definim un Log d'accions
 	ErrorLog *log.Logger //Definim un Log d'errors
 	MainWindow fyne.Window //Aqui enmagatzemem la referencia a certes arees de la ui per controlar les actualitzacions de les mateixes.
+	ClimaDadesContainer *fyne.Container //Guardem el contenidor de les dades del clima, referenciant el punter de memòria del contenidor de fyne.
 }
 
 var myApp Config //Creem una variable que sigui de tipus Config i aixi enmagatzemar la configuració de l'App

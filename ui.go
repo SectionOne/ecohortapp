@@ -11,6 +11,13 @@ func (app *Config) makeUI() {
 		tempMax,
 		tempMin,
 		humitat,
-	)
+	) //Definim un contenidor amb una graella amb quatre columnes
+
+	app.ClimaDadesContainer = climaDadesContent
+
 	//afegir el contenidor a la finestra
+	finalContent := container.NewVBox(climaDadesContent) //Definim un nou contenidor i que afegirem al canvas general.
+	
+	//Invoquem la pàgina principal i fem servir el mètode SetContent per afegir el contenidor
+	app.MainWindow.SetContent(finalContent)
 }
