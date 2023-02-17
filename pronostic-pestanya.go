@@ -25,6 +25,7 @@ func (app *Config) pronosticTab() *fyne.Container {
 
 func (app *Config) obtenirGrafic() *canvas.Image {
 	//Definim la url de carrega del gràfic
+	//apiURL := fmt.Sprintf("https://www.aemet.es/es/eltiempo/prediccion/municipios/mostrarwidget/baga-id08016?w=g4p11111111ohmffffffw992z323x4f86d9t95b6e9r1s8n2")
 	apiURL := fmt.Sprint("https://my.meteoblue.com/visimage/meteogram_web_hd?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Abrera&iso2=es&lat=41.5168&lon=1.901&asl=111&tz=Europe%2FMadrid&lang=es&sig=b353aab637f77ab97ae54cbd760554f2")
 	var img *canvas.Image
 
