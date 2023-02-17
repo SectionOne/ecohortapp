@@ -143,3 +143,22 @@ func (repo *SQLiteRepository) ActualitzarRegistre(id int64, actualitzar Registre
 	return nil
 }
 
+//Funció per borrar un Registre
+func (repo *SQLiteRepository) BorrarRegistre(id int64) error {
+	res, err := repo.Conn.Exec("delete from registres where id = ?", id)
+	if err != nil {
+		return err
+	}
+
+	//Comprobem quin numnero de registres es veuen afectats per el procés d'eliminació
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errUpdateFailed
+	}
+
+	return nil
+}
