@@ -87,3 +87,29 @@ func (repo *SQLiteRepository) ObtenirTotsRegistres() ([]Registres, error) {
 
 	return tots, nil //Retornem el slice o nil segons si es genera algun error
 }
+
+// Funció per obtenir dades per ID
+func (repo *SQLiteRepository) ObtenirRegistrePerID(id int) (*Registres, error) {
+	row := repo.Conn.QueryRow("select id, data_registre, precipitacio, temp_maxima, temp_minima, humitat from registres where id = ?", id)
+
+	//Preparem les variables
+	var h Registres
+	var unixTime int64
+	//Preparem un struct de tipus Holdings amb les dades obtingudes
+	err := row.Scan(
+		&h.ID,
+		&unixTime,
+		&h.Precipitacio,
+		&h.TempMaxima,
+		&h.TempMinima,
+		&h.Humitat,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	h.Data = time.Unix(unixTime, 0)
+
+	return &h, nil
+}
