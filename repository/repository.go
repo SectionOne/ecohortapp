@@ -29,5 +29,5 @@ type Registres struct {
 	Precipitacio int       `json:"precipitacio"`
 	TempMaxima   int       `json:"temp_maxima"`
 	TempMinima   int       `json:"temp_minima"`
-	Humitat      int       `json:"purchase_price"`
+	Humitat      int       `json:"humitat"`
 }
