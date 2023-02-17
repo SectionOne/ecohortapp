@@ -25,6 +25,11 @@ type Config struct {
 	Registres                [][]interface{}       //Per emmagatzemar el slice de slices en forma de interfície a on esta contingut les dades obtingudes de la bd
 	RegistresTable           *widget.Table         //Per emmagatzemar la referencia al punter que correspon el widget de la Taula.
 	HTTPClient               http.Client           //Afegim la referència al client http sence necessitat de invocar la llibreria
+	AfegirRegistresDataRegistreEntrada *widget.Entry //Afegim la referencia a la entrada del valor data registre per a nous registres que guardem en la bd
+	AfegirRegistresPrecipitacioEntrada *widget.Entry //Afegim la referencia a la entrada del valor precipitacio per a nous registres que guardem en la bd
+	AfegirRegistresTempMaximaEntrada *widget.Entry //Afegim la referencia a la entrada del valor tempMaxima per a nous registres que guardem en la bd
+	AfegirRegistresTempMinimaEntrada *widget.Entry //Afegim la referencia a la entrada del valor tempMinima per a nous registres que guardem en la bd
+	AfegirRegistresHumitatEntrada *widget.Entry //Afegim la referencia a la entrada del valor humitat per a nous registres que guardem en la bd
 }
 
 func main() {
