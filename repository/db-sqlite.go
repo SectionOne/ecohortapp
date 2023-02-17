@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 	"time"
 )
 
@@ -113,3 +114,32 @@ func (repo *SQLiteRepository) ObtenirRegistrePerID(id int) (*Registres, error) {
 
 	return &h, nil
 }
+
+// Realitzem l'actualització d'un Registre.
+func (repo *SQLiteRepository) ActualitzarRegistre(id int64, actualitzar Registres) error {
+	//Validem si la id és 0 i aixi controlem possibles errors
+	if id == 0 {
+		return errors.New("La id a actualitzar és incorrecte")
+	}
+
+	//Preparem la petició per updatejar les dades
+	stmt := "Update registres set data_registre = ?, precipitacio = ?, temp_maxima = ?, temp_minima = ?, humitat = ?"
+	res, err := repo.Conn.Exec(stmt, actualitzar.Data.Unix(), actualitzar.Precipitacio, actualitzar.TempMaxima, actualitzar.TempMinima, actualitzar.Humitat, id)
+	//Controlem possibles errors
+	if err != nil {
+		return err
+	}
+
+	//Comprobem el nombre de registres que han sigut afectats per l'actualització, per poder controlar si és el cas que son 0.
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsAffected == 0 {
+		return errUpdateFailed
+	}
+
+	return nil
+}
+
