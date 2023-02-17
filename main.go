@@ -38,6 +38,8 @@ func main() {
 	myApp.MainWindow.SetFixedSize(true)             //Definim que tindra un tamany fixe
 	myApp.MainWindow.SetMaster()                    //Indiquem que es la pantalla principal. Si tanquem aquesta pantalla la aplicacio finalitza
 
+	myApp.makeUI() //Crearem una invocació a una funció externa que creara la interficié grafica a partir del contingut.
+	
 	//mostrar i executar l'aplicació
 	myApp.MainWindow.ShowAndRun()
 }
