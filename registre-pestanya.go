@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"strconv"
 
-	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 )
 
 // Realitzem una funció que retornara un contenidor de Fyne amb el contingut
 func (app *Config) registresTab() *fyne.Container {
+	//També invoquem el mètode getRegistresTable() i l'asignem al item RegistresTable del struct
+	app.RegistresTable = app.getRegistresTable()
 	return nil
 }
 
@@ -21,7 +23,8 @@ func (app *Config) registresTab() *fyne.Container {
 func (app *Config) getRegistresTable() *widget.Table {
 	//Invoquem la funcio anterior per carregar l'estructura de dedes amb la interficie de slice de slices
 	data := app.getRegistresSlice()
-
+	//Invoquem la variable que conte el slice i l'asignem al item Registres del struct config
+	app.Registres = data
 	//Definim l'estructura del widget per crear una nova taula amb fyne
 	t := widget.NewTable(
 		func() (int, int) {
