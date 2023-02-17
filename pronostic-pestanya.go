@@ -18,7 +18,29 @@ func (app *Config) pronosticTab() *fyne.Container {
 }
 
 func (app *Config) obtenirGrafic() *canvas.Image {
-	return nil
+	//Definim la url de carrega del gràfic
+	apiURL := fmt.Sprintf("https://my.meteoblue.com/visimage/meteogram_web_hd?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Abrera&iso2=es&lat=41.5168&lon=1.901&asl=111&tz=Europe%2FMadrid&lang=es&sig=b353aab637f77ab97ae54cbd760554f2")
+	var img *canvas.Image
+
+	//Comprobem si és produeix algun error com per exemple, el servidor esta desconectat, hi ha algun error de xarxa, etç...
+	if err != nil {
+		//En aquest cas emprarem la imatge del paquet per defecte
+	} else {
+		//Generem la imatge
+		img = canvas.NewImageFromFile("pronostic.png")
+	}
+
+	//Ara establim el tamany minim de la imatge emprant un mètode de Fyne
+	img.SetMinSize(fyne.Size{
+		Width:  770,
+		Height: 410,
+	})
+
+	//Determinem com la imatge omplira el canvas
+	img.FillMode = canvas.ImageFillOriginal
+
+	//Retornem la imatge
+	return img
 }
 
 func (app *Config) descarregarArxiu(URL, nomArxiu string) error {
