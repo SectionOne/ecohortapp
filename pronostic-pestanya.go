@@ -11,15 +11,21 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
+	"fyne.io/fyne/v2/container"
 )
 
 func (app *Config) pronosticTab() *fyne.Container {
-	return nil
+	grafic := app.obtenirGrafic()                //Invoquem el mètode obtenirGrafic() i el guardem en la variable grafic
+	graficContainer := container.NewVBox(grafic) //Creem un nou contenidor Vertical a on afegim la variable grafic
+	app.PronosticGraficContainer = graficContainer
+
+	//Retornem el contenidor
+	return graficContainer
 }
 
 func (app *Config) obtenirGrafic() *canvas.Image {
 	//Definim la url de carrega del gràfic
-	apiURL := fmt.Sprintf("https://my.meteoblue.com/visimage/meteogram_web_hd?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Abrera&iso2=es&lat=41.5168&lon=1.901&asl=111&tz=Europe%2FMadrid&lang=es&sig=b353aab637f77ab97ae54cbd760554f2")
+	apiURL := fmt.Sprint("https://my.meteoblue.com/visimage/meteogram_web_hd?look=KILOMETER_PER_HOUR%2CCELSIUS%2CMILLIMETER&apikey=5838a18e295d&temperature=C&windspeed=kmh&precipitationamount=mm&winddirection=3char&city=Abrera&iso2=es&lat=41.5168&lon=1.901&asl=111&tz=Europe%2FMadrid&lang=es&sig=b353aab637f77ab97ae54cbd760554f2")
 	var img *canvas.Image
 
 	//Descarreguem la imatge mitjantçant la invocació del mètode descarregarArxiu() transmetent els seus dos parametres la url i el nom del arxiu que desitgem adjudicar-li.
@@ -46,7 +52,7 @@ func (app *Config) obtenirGrafic() *canvas.Image {
 	return img
 }
 
-func (app *Config) descarregarArxiu(URL, nomArxiu string) error {
+func (app *Config) descarregarArxiu(URL string, nomArxiu string) error {
 	//Obtenim la resposta en bytes desde la crida a una url
 	response, err := app.HTTPClient.Get(URL)
 	if err != nil {
@@ -54,7 +60,7 @@ func (app *Config) descarregarArxiu(URL, nomArxiu string) error {
 	}
 
 	if response.StatusCode != 200 {
-		return errors.New("Rebem un codi de resposta erronia quan descarreguem la imatge.")
+		return errors.New("rebem un codi de resposta erronia quan descarreguem la imatge")
 	}
 
 	b, err := io.ReadAll(response.Body)

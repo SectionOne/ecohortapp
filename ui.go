@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fyne.io/fyne/theme"
+	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 )
@@ -22,9 +22,11 @@ func (app *Config) makeUI() {
 	//obtenim la barra d'eines o toolbar
 	toolBar := app.getToolBar(app.MainWindow)
 
+	pronosticTabContent := app.pronosticTab()
+
 	//obtenim les pestanyes de l'aplicació
 	tabs := container.NewAppTabs( //Definim un contenidor per les pestanyes i dins afegim cada una de les pestanyes amb icones
-		container.NewTabItemWithIcon("Pronòstic", theme.HomeIcon(), canvas.NewText("El contingut dels pronostics dels propers 4 dies els situarem aqui", nil)),
+		container.NewTabItemWithIcon("Pronòstic", theme.HomeIcon(), pronosticTabContent),
 		container.NewTabItemWithIcon("Diari Meteorològic", theme.InfoIcon(), canvas.NewText("El contingut dels valors enregistrats els situarem aqui", nil)),
 	)
 
