@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -39,9 +41,17 @@ func (app *Config) makeUI() {
 
 	//Invoquem la pàgina principal i fem servir el mètode SetContent per afegir el contenidor
 	app.MainWindow.SetContent(finalContent)
+
+	//Realitzem una funcio anonima que sera invocada per una GoRutine en segon pla
+	go func() {
+		for range time.Tick(time.Second * 30) {
+			app.actualitzarClimaDadesContent() //Invoquem la funcio de refrescar els preus
+		}
+	}()
 }
 
 func (app *Config) actualitzarClimaDadesContent() {
+	app.InfoLog.Print("refrescant els preus") //Realitzem un log per tenir constancia que s'esta executant la gorutine
 	precipitacio, tempMax, tempMin, humitat := app.getClimaText()
 	app.ClimaDadesContainer.Objects = []fyne.CanvasObject{precipitacio, tempMax, tempMin, humitat}
 	app.ClimaDadesContainer.Refresh()
