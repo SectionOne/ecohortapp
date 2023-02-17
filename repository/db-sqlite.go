@@ -1,6 +1,9 @@
 package repository
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 type SQLiteRepository struct {
 	Conn *sql.DB
@@ -28,4 +31,24 @@ func (repo *SQLiteRepository) Migrate() error {
 
 	_, err := repo.Conn.Exec(query)
 	return err
+}
+
+func (repo *SQLiteRepository) InsertRegistre(registres Registres) (*Registres, error) {
+	//Preparem la instrucció per afegir un registre en la taula registres
+	stmt := "insert into registres (data_registre, precipitacio, temp_maxima, temp_minima, humitat) values (?,?,?,?,?)"
+
+	//Executem la instrucció
+	res, err := repo.Conn.Exec(stmt, registres.Data.Unix(), registres.Precipitacio, registres.TempMaxima, registres.TempMinima, registres.Humitat)
+	if err != nil {
+		return nil, err
+	}
+
+	//Afegim una crida a la funció LastInsertId() de la rersposta per obtenir la id que s'ha generat amb aquesta inserció
+	id, err := res.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	registres.ID = id
+	return &registres, nil //Preparem els retorn amb un objecte o nil en cas d'error
 }
