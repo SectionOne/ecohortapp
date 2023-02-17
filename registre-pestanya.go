@@ -14,6 +14,8 @@ import (
 
 // Realitzem una funció que retornara un contenidor de Fyne amb el contingut
 func (app *Config) registresTab() *fyne.Container {
+	//Invoquem la funcio anterior per carregar l'estructura de dedes amb la interficie de slice de slices
+	app.Registres = app.getRegistresSlice()
 	//També invoquem el mètode getRegistresTable() i l'asignem al item RegistresTable del struct
 	app.RegistresTable = app.getRegistresTable()
 	//Creem un contenidor amb una capça vertical i a on situem el widget que em general de la taula Registres
@@ -31,30 +33,28 @@ func (app *Config) registresTab() *fyne.Container {
 
 // Realitzem una funcio adicional que ens retornara el punter a la widget en forma de taula i a on situarem les dades
 func (app *Config) getRegistresTable() *widget.Table {
-	//Invoquem la funcio anterior per carregar l'estructura de dedes amb la interficie de slice de slices
-	data := app.getRegistresSlice()
-	//Invoquem la variable que conte el slice i l'asignem al item Registres del struct config
-	app.Registres = data
 	//Definim l'estructura del widget per crear una nova taula amb fyne
 	t := widget.NewTable(
 		func() (int, int) {
-			return len(data), len(data[0])
+			return len(app.Registres), len(app.Registres[0])
 		},
 		func() fyne.CanvasObject {
 			ctr := container.NewVBox(widget.NewLabel(""))
 			return ctr
 		},
 		func(i widget.TableCellID, o fyne.CanvasObject) {
-			if i.Col == (len(data[0])-1) && i.Row != 0 {
+			if i.Col == (len(app.Registres[0])-1) && i.Row != 0 {
 				//Ultima cel.la - situa un botò
 				w := widget.NewButtonWithIcon("Borrar", theme.DeleteIcon(), func() {
 					//Presentem un dialeg de confirmació
 					dialog.ShowConfirm("Borrar?", "", func(deleted bool) {
-						id, _ := strconv.Atoi(data[i.Row][0].(string)) //Transformem el identificador a decimal sencer
-						err := app.DB.BorrarRegistre(int64(id))        //Invoquem el metode per borrar a partir d'un id
-						//Capturem possibles errors
-						if err != nil {
-							app.ErrorLog.Println(err)
+						if deleted {
+							id, _ := strconv.Atoi(app.Registres[i.Row][0].(string)) //Transformem el identificador a decimal sencer
+							err := app.DB.BorrarRegistre(int64(id))        //Invoquem el metode per borrar a partir d'un id
+							//Capturem possibles errors
+							if err != nil {
+								app.ErrorLog.Println(err)
+							}
 						}
 						//Forcem el refresc de la taula
 						app.actualitzarRegistresTable()
@@ -70,7 +70,7 @@ func (app *Config) getRegistresTable() *widget.Table {
 			} else {
 				//situarem la informació rebuda en el slice, recordem que primer gestiona la fila i després la columna
 				o.(*fyne.Container).Objects = []fyne.CanvasObject{
-					widget.NewLabel(data[i.Row][i.Col].(string)),
+					widget.NewLabel(app.Registres[i.Row][i.Col].(string)),
 				}
 			}
 		})
