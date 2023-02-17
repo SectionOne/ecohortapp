@@ -53,6 +53,10 @@ func main() {
 	//crearem un repositori de base de dades
 	myApp.setupDB(sqlDB)
 
+	//Definim la capacitat de que l'usuari modifiqui el municipi i la apiKey
+	municipi = fyneApp.Preferences().StringWithFallback("municipi","08001")
+	municipi = fyneApp.Preferences().StringWithFallback("apiKey","eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJvZGlnaW9jaW9AZ21haWwuY29tIiwianRpIjoiYjRlZTViMjctZDhhMS00YmIxLWFiZjgtYmFjYTViOTc5ZDhjIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE2NzU2MTY3OTIsInVzZXJJZCI6ImI0ZWU1YjI3LWQ4YTEtNGJiMS1hYmY4LWJhY2E1Yjk3OWQ4YyIsInJvbGUiOiIifQ.y-WKC8DkAJ4O__aNkvWS60AwmYl6dVHcBZKcowfmNKs")
+
 	//crearem i definim el tamany de una pantalla de fyne
 	myApp.MainWindow = fyneApp.NewWindow("Eco Hort App")
 	myApp.MainWindow.Resize(fyne.NewSize(900, 700)) //Definim el tamany de la finestra
